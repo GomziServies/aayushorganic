@@ -305,8 +305,8 @@
                                     </select>
                                 </div>
                                 <div class="col-xl-6">
-                                    <input type="date" id="date" class="form-control py-3 border-primary bg-transparent"
-                                        placeholder="Date">
+                                    <input type="date" name="date" id="date"
+                                        class="form-control py-3 border-primary bg-transparent">
                                 </div>
                                 <div class="col-xl-6">
                                     <select id="department" class="form-select py-3 border-primary bg-transparent"
@@ -576,6 +576,18 @@
 
 
     <script>
+        // Get today's date
+        var today = new Date();
+
+        // Format date as YYYY-MM-DD (required format for input type="date")
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
+
+        // Set the value of the date input field to today's date
+        document.getElementById('date').value = today;
         // Initialize EmailJS with your User ID
         emailjs.init("1PVIxDR2eQewAhDyP");
 

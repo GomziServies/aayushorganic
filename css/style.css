@@ -82,6 +82,8 @@
 .btn.btn-primary:hover {
     box-shadow: inset 300px 0 0 0 var(--bs-light) !important;
     color: #23767f !important;
+    border: 3px #23767f solid;
+    border-radius: 5px;
 }
 
 .btn.btn-light {
@@ -1239,5 +1241,18 @@
         width: 370px !important;
         height: 400px !important;
     }
+
+}
+
+.product-from label {
+    margin-bottom: 10px;
+    color: #000000;
+    font-weight: 500;
+}
+
+
+.product-from input {
+    border-radius: 8px;
+    padding: 0.575rem 0.75rem;
 
 }

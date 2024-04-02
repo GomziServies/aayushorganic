@@ -896,13 +896,11 @@
 
 @media (max-width: 900px) {
     .testimonial .testimonial-carousel .owl-nav .owl-prev {
-        margin-top: -190px;
-        margin-left: 40px;
+        display: none;
     }
 
     .testimonial .testimonial-carousel .owl-nav .owl-next {
-        margin-top: -190px;
-        margin-right: 40px;
+        display: none;
     }
 
 }

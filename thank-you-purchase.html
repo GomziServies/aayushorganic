@@ -56,7 +56,7 @@
         const checkPaymentStatus = async (transactionId) => {
             try {
                 // const response = await axios.get(`http://localhost:5000/get-payment-status?transactionId=${transactionId}`);
-                const response = await axios.get(`https://aayushorganic-admin-ynpm.onrender.com/get-payment-status?transactionId=${transactionId}`);
+                const response = await axios.get(`https://admin.aayushorganics.com/get-payment-status?transactionId=${transactionId}`);
                 return response.data;
             } catch (error) {
                 console.error('Error checking payment status:', error);

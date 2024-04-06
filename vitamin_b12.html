@@ -670,7 +670,7 @@
                 };
 
                 try {
-                    const response = await axios.post('https://aayushorganic-admin-ynpm.onrender.com/create-payment', formData);
+                    const response = await axios.post('https://admin.aayushorganics.com/create-payment', formData);
                     // const response = await axios.post('http://localhost:5000/create-payment', formData);
                     console.log(response)
                     if (response.data.data.redirectUrl) {

@@ -155,7 +155,7 @@
                                 <span>4.5 (3,120)</span>
                             </div>
                             <div class="blog2 mt-3">
-                                <form class="product-from">
+                                <form class="product-from" id="productForm">
                                     <div class="row">
                                         <div class="col-6">
                                             <div class="form-group mb-3">
@@ -173,14 +173,21 @@
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group mb-3">
-                                                <label>Address-1</label>
+                                                <label>Email</label>
+                                                <input type="text" class="form-control" placeholder="Enter Mobile no."
+                                                    id="txt_email">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group mb-3">
+                                                <label>Plot/Flat No.</label>
                                                 <input type="text" class="form-control" placeholder="Enter Address"
                                                     id="txt_address">
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group mb-3">
-                                                <label>Address-2</label>
+                                                <label>Street/Colony</label>
                                                 <input type="text" class="form-control" placeholder="Enter Address"
                                                     id="txt_address_2">
                                             </div>
@@ -201,9 +208,7 @@
                                         </div>
                                         <div class="col-lg-8 col-7">
                                             <div class="price mt-4 ml-lg-5">
-                                                <p class="my-3"><i class="fas fa-rupee-sign"></i>299/-</p>
-                                                <!-- <del><i class="fas fa-rupee-sign"></i>2999</del>
-                                            <span class="p1">10% OFF</span> -->
+                                                <p class="my-3">₹<span id="product_price">299</span>/-</p>
                                             </div>
                                         </div>
                                         <div class="col-lg-4 col-5">
@@ -218,8 +223,8 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
-                                        <a href="#" class="btn btn-primary text-white py-2 px-4">Buy
-                                            Now</a>
+                                        <button type="submit" class="btn btn-primary text-white py-2 px-4">Buy
+                                            Now</button>
                                     </div>
                                 </form>
                             </div>
@@ -330,7 +335,6 @@
                 </div>
             </div>
         </section>
-
         <div class="container-fluid testimonial py-5 ">
             <div class="container py-5">
                 <div class="section-title mb-5">
@@ -505,7 +509,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Footer Start -->
         <div class="container-fluid footer py-5 ">
             <div class="container py-5">
@@ -602,80 +605,98 @@
         <script src="lib/easing/easing.min.js"></script>
         <script src="lib/waypoints/waypoints.min.js"></script>
         <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
 
         <script>
             function incrementQuantity() {
                 var quantityInput = document.getElementById('txt_quantity');
-                quantityInput.value = parseInt(quantityInput.value) + 1;
+                var quantity = parseInt(quantityInput.value);
+                if (quantity < 10) {
+                    quantityInput.value = quantity + 1;
+                    updateTotalPrice();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Maximum quantity reached!',
+                    });
+                }
             }
 
             function decrementQuantity() {
                 var quantityInput = document.getElementById('txt_quantity');
-                if (parseInt(quantityInput.value) > 1) {
-                    quantityInput.value = parseInt(quantityInput.value) - 1;
+                var quantity = parseInt(quantityInput.value);
+                if (quantity > 1) {
+                    quantityInput.value = quantity - 1;
+                    updateTotalPrice();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Minimum quantity reached!',
+                    });
                 }
             }
+
+
+            function updateTotalPrice() {
+                var quantity = parseInt(document.getElementById('txt_quantity').value);
+                var pricePerItem = 299; // Assuming the price per item is ₹299
+                var totalPrice = quantity * pricePerItem;
+                document.getElementById('product_price').innerText = totalPrice;
+            }
         </script>
-
         <script>
-            // Get today's date
-            var today = new Date();
+            const handleSubmit = async (event) => {
+                event.preventDefault();
 
-            // Format date as YYYY-MM-DD (required format for input type="date")
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-            var yyyy = today.getFullYear();
+                // Generate a unique transaction ID
+                const transactionId = generateRandomId();
+                const userId = generateRandomId();
 
-            today = yyyy + '-' + mm + '-' + dd;
-
-            // Set the value of the date input field to today's date
-            document.getElementById('date').value = today;
-            // Initialize EmailJS with your User ID
-            emailjs.init("1PVIxDR2eQewAhDyP");
-
-            function sendMail() {
-                var params = {
-                    name: document.getElementById("name").value,
-                    email: document.getElementById("email").value,
-                    mobile: document.getElementById("mobile").value,
-                    gender: document.getElementById("gender").value,
-                    date: document.getElementById("date").value,
-                    department: document.getElementById("department").value,
-                    messages: document.getElementById("message").value
+                const formData = {
+                    transactionId: transactionId,
+                    user_id: userId,
+                    name: document.getElementById('txt_name').value,
+                    mobile: document.getElementById('txt_mobile').value,
+                    email: document.getElementById('txt_email').value,
+                    address_line_1: document.getElementById('txt_address').value,
+                    address_line_2: document.getElementById('txt_address_2').value,
+                    city: document.getElementById('txt_city').value,
+                    pincode: document.getElementById('txt_pincode').value,
+                    quantity: document.getElementById('txt_quantity').value,
+                    product_name: 'Diabetes Care Powder',
+                    product_id: 'DIABETES8845',
+                    total_amount: document.getElementById('product_price').innerText
                 };
 
-                const serviceID = "service_7z2jtin";
-                const templateID = "template_n6uylzb";
+                try {
+                    const response = await axios.post('https://aayushorganic-admin-ynpm.onrender.com/create-payment', formData);
+                    // const response = await axios.post('http://localhost:5000/create-payment', formData);
+                    console.log(response)
+                    if (response.data.data.redirectUrl) {
+                        window.location.href = response.data.data.redirectUrl;
+                    } else {
+                        console.error('Redirect URL not found in the response.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            };
 
-                emailjs.send(serviceID, templateID, params)
-                    .then(function (response) {
-                        document.getElementById("name").value = "";
-                        document.getElementById("email").value = "";
-                        document.getElementById("mobile").value = "";
-                        document.getElementById("gender").selectedIndex = 0;
-                        document.getElementById("date").value = "";
-                        document.getElementById("department").selectedIndex = 0;
-                        document.getElementById("message").value = "";
+            document.getElementById('productForm').addEventListener('submit', handleSubmit);
 
-                        console.log("Email sent successfully", response);
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Thank you for contacting us',
-                            text: 'We will contact you soon.'
-                        });
-                    })
-                    .catch(function (error) {
-                        console.error("Error sending email", error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Something went wrong. Please try again later.'
-                        });
-                    });
+            function generateRandomId() {
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                let randomId = '';
+                for (let i = 0; i < 10; i++) {
+                    randomId += characters.charAt(Math.floor(Math.random() * characters.length));
+                }
+                return randomId;
             }
+
         </script>
 
 </body>
